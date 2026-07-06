@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-const db = null;
 
 interface DateInvitationProps {
   dateInvite?: any;
@@ -217,22 +216,7 @@ export default function DateInvitation({
       );
     } catch (e) {}
 
-    if (letterId && db && !preview) {
-      try {
-        // @ts-ignore
-        const { doc, updateDoc } = await import("firebase/firestore");
-        const docRef = doc(db, "letters", letterId);
-        await updateDoc(docRef, {
-          "birthdayPlan.food": finalFood,
-          "birthdayPlan.activities": combinedActivities,
-          "birthdayPlan.dresscode": finalDresscode,
-          "birthdayPlan.notes": notes.trim(),
-          "birthdayPlan.timestamp": timestamp,
-        });
-      } catch (err) {
-        console.error("Failed to save plan to Firestore:", err);
-      }
-    }
+
 
     setTimeout(() => {
       triggerHeartsBurst();

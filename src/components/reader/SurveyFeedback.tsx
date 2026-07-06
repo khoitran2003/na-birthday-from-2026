@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-const db = null;
 
 interface SurveyFeedbackProps {
   survey: {
@@ -119,16 +118,7 @@ export default function SurveyFeedback({ survey, sender, recipient, letterKey, l
         }).catch((err) => console.error("Error sending email from survey feedback:", err));
       }
 
-      if (letterId && db && !preview) {
-        // @ts-ignore
-        const { doc, updateDoc } = await import("firebase/firestore");
-        const docRef = doc(db, "letters", letterId);
-        await updateDoc(docRef, {
-          "survey.responseEmoji": surveyEmoji,
-          "survey.responseFeedback": surveyText,
-          "survey.responseTimestamp": timestamp
-        });
-      }
+
     } catch (err) {
       console.error("Failed to save survey result:", err);
     }

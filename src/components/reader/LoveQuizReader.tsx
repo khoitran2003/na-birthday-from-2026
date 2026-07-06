@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-const db = null;
 
 interface QuestionItem {
   question: string;
@@ -208,23 +207,9 @@ export default function LoveQuizReader({
     setLifelines(prev => ({ ...prev, FiftyFifty: false, Hint: false, Skip: false }));
   }, [currentIdx]);
 
-  // Sync game won status to Firestore
+  // Sync game won status
   useEffect(() => {
-    if (gameWon && letterId && db && !preview) {
-      const saveWinToDb = async () => {
-        try {
-          const { doc, updateDoc } = await import("firebase/firestore");
-          const docRef = doc(db, "letters", letterId);
-          await updateDoc(docRef, {
-            "loveQuiz.won": true,
-            "loveQuiz.wonTimestamp": Date.now()
-          });
-        } catch (err) {
-          console.error("Failed to save quiz win to Firestore:", err);
-        }
-      };
-      saveWinToDb();
-    }
+    // Game won state handled locally via localStorage/state
   }, [gameWon, letterId]);
 
   // Execute answer reveal process after choice selection (and potential final confirmation)
@@ -374,18 +359,9 @@ export default function LoveQuizReader({
       localStorage.setItem(`love_quiz_claimed_${keyPart}`, "true");
     }
 
-    // Save claim status to Firestore
-    if (letterId && db && !preview) {
-      try {
-        const { doc, updateDoc } = await import("firebase/firestore");
-        const docRef = doc(db, "letters", letterId);
-        await updateDoc(docRef, {
-          "loveQuiz.claimed": true,
-          "loveQuiz.claimedTimestamp": Date.now()
-        });
-      } catch (err) {
-        console.error("Failed to save quiz claim status to Firestore:", err);
-      }
+    // Save claim status to localStorage
+    if (letterId && !preview) {
+      // Claim status saved to localStorage
     }
 
     // Trigger API email notification to sender if emails are provided
