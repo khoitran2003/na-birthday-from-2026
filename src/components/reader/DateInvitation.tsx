@@ -16,7 +16,7 @@ interface DateInvitationProps {
 export default function DateInvitation({
   dateInvite,
   sender = "Bé Tin",
-  recipient = "Na",
+  recipient = "Bé Na",
   letterKey,
   letterId,
   senderEmail,
